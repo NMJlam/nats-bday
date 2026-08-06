@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Study in blue</title>
+  <desc id="desc">Layered translucent blue geometric forms.</desc>
+  <rect width="1200" height="900" fill="#d7e8eb"/>
+  <rect x="85" y="95" width="610" height="650" rx="42" fill="#427d9a" transform="rotate(-5 390 420)"/>
+  <circle cx="770" cy="380" r="300" fill="#16537a" opacity=".82"/>
+  <path d="M500 830 720 80l410 750Z" fill="#132f5c" opacity=".8"/>
+  <circle cx="870" cy="600" r="130" fill="#7fb3c3" opacity=".78"/>
+</svg>

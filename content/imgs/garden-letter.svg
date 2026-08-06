@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Garden letter</title>
+  <desc id="desc">A pale sweet pea flower against a deep green garden.</desc>
+  <rect width="1200" height="900" fill="#214c3b"/>
+  <path d="M610 900C600 680 650 490 740 280" fill="none" stroke="#75966a" stroke-width="25"/>
+  <path d="M640 665C500 600 390 655 390 655s110 125 250 80Z" fill="#527c56"/>
+  <path d="M685 500C830 430 935 500 935 500s-115 120-255 70Z" fill="#66936c"/>
+  <g transform="translate(730 250)">
+    <ellipse cx="0" cy="0" rx="125" ry="88" fill="#f1c9d7" transform="rotate(-20)"/>
+    <ellipse cx="100" cy="50" rx="116" ry="80" fill="#e9aebe" transform="rotate(28 100 50)"/>
+    <ellipse cx="-25" cy="105" rx="110" ry="78" fill="#f6dce4" transform="rotate(42 -25 105)"/>
+    <circle cx="35" cy="58" r="42" fill="#d889a1"/>
+  </g>
+</svg>

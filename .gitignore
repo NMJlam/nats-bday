@@ -19,10 +19,13 @@
 
 # production
 /build
+/public/content-imgs/
 
 # misc
 .DS_Store
 *.pem
+/skill-observations/
+/cross-cutting-principles.md
 
 # debug
 npm-debug.log*

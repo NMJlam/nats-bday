@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Night signal</title>
+  <desc id="desc">Glowing sound waves crossing a dark night sky.</desc>
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#10152c"/><stop offset="1" stop-color="#34244f"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff7d78"/><stop offset=".5" stop-color="#f4c56b"/><stop offset="1" stop-color="#79d5c9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#night)"/>
+  <g fill="#f8f0d8" opacity=".8"><circle cx="160" cy="150" r="5"/><circle cx="980" cy="180" r="7"/><circle cx="1080" cy="350" r="4"/><circle cx="270" cy="680" r="6"/></g>
+  <path d="M0 520C120 520 120 350 240 350s120 330 240 330 120-470 240-470 120 400 240 400 120-180 240-180" fill="none" stroke="url(#signal)" stroke-width="34" stroke-linecap="round"/>
+</svg>

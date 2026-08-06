@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Coastal morning</title>
+  <desc id="desc">A warm sun rising above layered blue coastal shapes.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6d7b0"/><stop offset="1" stop-color="#8eb6bd"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="830" cy="250" r="110" fill="#fff1cb" opacity=".92"/>
+  <path d="M0 560Q230 450 470 570T900 545T1200 530V900H0Z" fill="#477a82"/>
+  <path d="M0 690Q210 600 430 690T850 675T1200 660V900H0Z" fill="#235462"/>
+  <path d="M0 760Q260 700 540 790T1200 735V900H0Z" fill="#173c49"/>
+</svg>
