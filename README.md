@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Field Notes
 
-## Getting Started
+A statically generated Next.js card gallery. Cards appear as an image wall and
+expand in place to reveal GitHub-style Markdown messages.
 
-First, run the development server:
+## Content
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+All cards live in [`content/card.md`](content/card.md). Add each image under
+`content/imgs/`, then reference it from the card metadata:
+
+```md
+---
+image: imgs/example.jpg
+category: travel
+---
+# Card heading
+
+Card message in GitHub-Flavored Markdown.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A card boundary is a `---` line followed immediately by `key: value` metadata
+lines and another `---`. Ordinary Markdown horizontal rules inside messages are
+preserved. Valid category IDs are defined in `lib/categories.ts`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The `predev` and `prebuild` scripts copy source images to the generated public
+asset directory automatically.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Quality checks:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm test
+npm run lint
+npm run typecheck
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The build command uses Next.js's supported Webpack compiler path and emits the
+landing, gallery, and category routes as static pages ready for Vercel.

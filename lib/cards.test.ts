@@ -51,4 +51,18 @@ category: unknown
 `),
     ).toThrow('Card 1 has unknown category "unknown"');
   });
+
+  it("uses the filename for alt text when an H1 does not begin the message", () => {
+    const [card] = parseCards(`---
+image: imgs/quiet-garden.svg
+category: life
+---
+An opening paragraph.
+
+# A Later Heading
+`);
+
+    expect(card.alt).toBe("quiet garden");
+    expect(card.id).toBe("a-later-heading");
+  });
 });

@@ -14,7 +14,8 @@ const cards: Card[] = [
     id: "coast",
     image: "/content-imgs/coastal-morning.svg",
     category: "travel",
-    message: "# Coast\n\nA travel note.",
+    message:
+      "# Coast\n\nA travel note.\n\n![Cliffs](imgs/coastal-morning.svg)\n\n```js\nconst answer = 42;\n```",
     alt: "Coast",
   },
   {
@@ -59,6 +60,10 @@ describe("gallery interactions", () => {
 
     expect(screen.getByRole("dialog", { name: "Coast" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Coast" })).toBeTruthy();
+    expect(screen.getByAltText("Cliffs").getAttribute("src")).toContain(
+      "/content-imgs/coastal-morning.svg",
+    );
+    expect(document.querySelector("code.hljs")).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
 
     await user.keyboard("{Escape}");

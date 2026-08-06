@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import "github-markdown-css/github-markdown.css";
+import "highlight.js/styles/github.css";
 import "./globals.css";
 
 import { Nav } from "@/components/Nav";

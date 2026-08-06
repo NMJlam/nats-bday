@@ -20,13 +20,19 @@ function isCategoryId(value: string): value is CategoryId {
   return (CATEGORY_IDS as readonly string[]).includes(value);
 }
 
-function headingText(message: string): string | undefined {
+function firstHeadingText(message: string): string | undefined {
   const heading = message.match(/^#\s+(.+?)\s*#*\s*$/m)?.[1]?.trim();
 
   return heading || undefined;
 }
 
-function plainText(value: string): string {
+function leadingHeadingText(message: string): string | undefined {
+  const heading = message.match(/^#\s+(.+?)\s*#*\s*(?:\r?\n|$)/)?.[1]?.trim();
+
+  return heading || undefined;
+}
+
+function stripInlineMarkdown(value: string): string {
   return value
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
@@ -90,8 +96,11 @@ export function parseCards(source: string): Card[] {
       parsed.data.image,
       cardNumber,
     );
-    const heading = headingText(message);
-    const baseId = heading ? slugify(plainText(heading)) : `card-${cardNumber}`;
+    const firstHeading = firstHeadingText(message);
+    const leadingHeading = leadingHeadingText(message);
+    const baseId = firstHeading
+      ? slugify(stripInlineMarkdown(firstHeading))
+      : `card-${cardNumber}`;
     const idRoot = baseId || `card-${cardNumber}`;
     const duplicateNumber = (idCounts.get(idRoot) ?? 0) + 1;
     idCounts.set(idRoot, duplicateNumber);
@@ -101,7 +110,9 @@ export function parseCards(source: string): Card[] {
       image: publicPath,
       category,
       message,
-      alt: heading ? plainText(heading) : altFromFilename.replace(/[-_]+/g, " "),
+      alt: leadingHeading
+        ? stripInlineMarkdown(leadingHeading)
+        : altFromFilename.replace(/[-_]+/g, " "),
     };
   });
 }

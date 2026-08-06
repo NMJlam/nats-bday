@@ -11,6 +11,7 @@ import {
 
 import type { Card } from "@/lib/cards";
 
+import { CARD_LAYOUT_SPRING } from "./animation";
 import { CardExpand } from "./CardExpand";
 
 type CardGridProps = {
@@ -26,12 +27,15 @@ export function CardGrid({ cards }: CardGridProps) {
     setActiveCard(null);
     window.requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
+  const expandedCard = activeCard ? (
+    <CardExpand key={activeCard.id} card={activeCard} onClose={closeCard} />
+  ) : null;
 
   return (
     <LayoutGroup>
       {cards.length > 0 ? (
         <motion.ul
-          className="card-grid"
+          className="m-0 grid list-none grid-cols-1 gap-[clamp(1rem,2vw,1.75rem)] p-0 sm:grid-cols-2 lg:grid-cols-3"
           aria-label="Card gallery"
           initial="hidden"
           animate="shown"
@@ -57,7 +61,7 @@ export function CardGrid({ cards }: CardGridProps) {
               transition={{ duration: reduceMotion ? 0 : 0.48, ease: "easeOut" }}
             >
               <button
-                className="card-tile"
+                className="group block w-full cursor-zoom-in rounded-[1.4rem] border-0 bg-transparent p-0 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
                 type="button"
                 aria-label={`Open ${card.alt}`}
                 onClick={(event) => {
@@ -66,12 +70,12 @@ export function CardGrid({ cards }: CardGridProps) {
                 }}
               >
                 <motion.div
-                  className="card-tile__image"
+                  className="relative aspect-4/3 overflow-hidden rounded-[1.4rem] bg-[#d5d7cd] shadow-[0_18px_45px_rgba(30,52,42,0.11)] transition-[box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_24px_56px_rgba(30,52,42,0.2)] [&_img]:object-cover"
                   layoutId={`card-${card.id}`}
                   transition={
                     reduceMotion
                       ? { duration: 0 }
-                      : { type: "spring", stiffness: 260, damping: 28 }
+                      : CARD_LAYOUT_SPRING
                   }
                 >
                   <Image
@@ -86,20 +90,12 @@ export function CardGrid({ cards }: CardGridProps) {
           ))}
         </motion.ul>
       ) : (
-        <p className="empty-gallery">No cards in this collection yet.</p>
+        <p className="py-20 text-center font-serif text-xl text-[#65736c]">
+          No cards in this collection yet.
+        </p>
       )}
 
-      {reduceMotion ? (
-        activeCard ? (
-          <CardExpand key={activeCard.id} card={activeCard} onClose={closeCard} />
-        ) : null
-      ) : (
-        <AnimatePresence>
-          {activeCard ? (
-            <CardExpand key={activeCard.id} card={activeCard} onClose={closeCard} />
-          ) : null}
-        </AnimatePresence>
-      )}
+      {reduceMotion ? expandedCard : <AnimatePresence>{expandedCard}</AnimatePresence>}
     </LayoutGroup>
   );
 }

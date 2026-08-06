@@ -29,8 +29,8 @@ export function CategoriesGallery({ cards }: CategoriesGalleryProps) {
         selected={selected}
         onSelect={setSelected}
       />
-      <div className="category-result" aria-live="polite">
-        <p className="eyebrow">
+      <div className="-mt-9 mb-5" aria-live="polite">
+        <p className="m-0 text-xs font-bold tracking-[0.17em] text-[#65736c] uppercase">
           {selected === null ? "All collections" : `${selected} collection`} ·{" "}
           {filteredCards.length} {filteredCards.length === 1 ? "card" : "cards"}
         </p>
