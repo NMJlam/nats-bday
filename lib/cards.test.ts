@@ -1,6 +1,30 @@
 import { describe, expect, it } from "vitest";
 
-import { parseCards } from "./cards";
+import { parseCards, shuffleCards, type Card } from "./cards";
+
+const shuffleCandidates: Card[] = [
+  {
+    id: "one",
+    image: "/content-imgs/one.svg",
+    category: "life",
+    message: "First card",
+    alt: "One",
+  },
+  {
+    id: "two",
+    image: "/content-imgs/two.svg",
+    category: "food",
+    message: "Second card",
+    alt: "Two",
+  },
+  {
+    id: "three",
+    image: "/content-imgs/three.svg",
+    category: "travel",
+    message: "Third card",
+    alt: "Three",
+  },
+];
 
 describe("parseCards", () => {
   it("keeps markdown horizontal rules inside a card message", () => {
@@ -64,5 +88,24 @@ An opening paragraph.
 
     expect(card.alt).toBe("quiet garden");
     expect(card.id).toBe("a-later-heading");
+  });
+});
+
+describe("shuffleCards", () => {
+  it("returns a shuffled copy without changing the source order", () => {
+    const randomValues = [0, 0];
+
+    const shuffled = shuffleCards(
+      shuffleCandidates,
+      () => randomValues.shift() ?? 0,
+    );
+
+    expect(shuffled.map((card) => card.id)).toEqual(["two", "three", "one"]);
+    expect(shuffleCandidates.map((card) => card.id)).toEqual([
+      "one",
+      "two",
+      "three",
+    ]);
+    expect(shuffled).not.toBe(shuffleCandidates);
   });
 });

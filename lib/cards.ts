@@ -117,6 +117,23 @@ export function parseCards(source: string): Card[] {
   });
 }
 
+export function shuffleCards(
+  cards: readonly Card[],
+  random: () => number = Math.random,
+): Card[] {
+  const shuffled = [...cards];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [
+      shuffled[randomIndex],
+      shuffled[index],
+    ];
+  }
+
+  return shuffled;
+}
+
 export function getAllCards(): Card[] {
   const cardFile = path.join(process.cwd(), "content", "card.md");
 
