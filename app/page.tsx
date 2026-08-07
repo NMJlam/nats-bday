@@ -18,13 +18,13 @@ export default function Home() {
         </h1>
         <p className="m-0 max-w-2xl font-serif text-[clamp(1.05rem,2vw,1.35rem)] leading-[1.55] text-white/90 text-shadow-md">
           A wall of little windows. Open one to find a message from someone who
-          feels lucky to have you in their life.
+          feels lucky to have you.
         </p>
         <Link
           className="mt-4 inline-flex w-fit items-center gap-6 rounded-full border border-white px-6 py-4 text-xs font-bold tracking-[0.14em] text-white uppercase no-underline shadow-lg transition-all hover:gap-8 hover:bg-white hover:text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
           href="/gallery"
         >
-          Enter the gallery <span aria-hidden="true">→</span>
+          Click to view<span aria-hidden="true">→</span>
         </Link>
       </div>
     </main>
