@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -59,11 +59,13 @@ beforeAll(() => {
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
 });
 
 describe("gallery interactions", () => {
   it("opens a card without navigation and returns focus after Escape", async () => {
     const user = userEvent.setup();
+    const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
     const initialUrl = window.location.href;
     render(<CardGrid cards={cards} />);
 
@@ -86,6 +88,7 @@ describe("gallery interactions", () => {
       expect(screen.queryByRole("dialog", { name: "Coast" })).toBeNull();
       expect(document.activeElement).toBe(opener);
     });
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
     expect(window.location.href).toBe(initialUrl);
   });
 
@@ -105,6 +108,18 @@ describe("gallery interactions", () => {
     expect(screen.queryByRole("button", { name: "Open Table" })).toBeNull();
     expect(screen.getByText("Stitch stitch stitch collection · 1 card")).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
+  });
+
+  it("closes an open card when the backdrop is clicked", async () => {
+    const user = userEvent.setup();
+    render(<CardGrid cards={cards} />);
+
+    await user.click(screen.getByRole("button", { name: "Open Coast" }));
+    await user.click(screen.getByTestId("card-dialog-backdrop"));
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog", { name: "Coast" })).toBeNull();
+    });
   });
 
   it("shows a quiet video preview and controls in the expanded card", async () => {

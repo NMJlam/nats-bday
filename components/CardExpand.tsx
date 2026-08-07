@@ -11,7 +11,7 @@ import remarkGfm from "remark-gfm";
 
 import type { Card } from "@/lib/cards";
 
-import { CARD_LAYOUT_TWEEN } from "./animation";
+import { CARD_DIALOG_CLOSED, CARD_DIALOG_TWEEN } from "./animation";
 import { CardMedia } from "./CardMedia";
 
 type CardExpandProps = {
@@ -51,31 +51,29 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
   }, [onClose]);
 
   return createPortal(
-    <motion.div
-      className="fixed inset-0 z-100 grid place-items-center bg-[rgba(17,27,23,0.62)] p-[clamp(0.75rem,3vw,2.5rem)] backdrop-blur-[14px] max-sm:p-2"
+    <div
+      className="fixed inset-0 z-100 grid place-items-center p-[clamp(0.75rem,3vw,2.5rem)] max-sm:p-2"
       role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
-      initial={reduceMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{
-        opacity: 0,
-        transition: { duration: reduceMotion ? 0 : 0.15 },
-      }}
-      transition={{ duration: reduceMotion ? 0 : 0.24 }}
     >
+      <motion.div
+        className="absolute inset-0 bg-[rgba(17,27,23,0.62)] backdrop-blur-[4px]"
+        data-testid="card-dialog-backdrop"
+        aria-hidden="true"
+        onMouseDown={onClose}
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={reduceMotion ? { duration: 0 } : CARD_DIALOG_TWEEN}
+      />
       <motion.article
-        className="relative grid h-[94vh] w-full grid-cols-1 grid-rows-[minmax(230px,42%)_minmax(0,58%)] overflow-hidden rounded-[1.15rem] border border-white/25 bg-[#fbfaf5] shadow-[0_45px_120px_rgba(8,15,12,0.42)] md:h-[min(730px,90vh)] md:w-[min(1120px,96vw)] md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:grid-rows-1 md:rounded-[1.6rem]"
-        layoutId={`card-${card.id}`}
+        className="relative z-1 grid h-[94vh] w-full grid-cols-1 grid-rows-[minmax(230px,42%)_minmax(0,58%)] overflow-hidden rounded-[1.15rem] border border-white/25 bg-[#fbfaf5] shadow-[0_45px_120px_rgba(8,15,12,0.42)] md:h-[min(730px,90vh)] md:w-[min(1120px,96vw)] md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:grid-rows-1 md:rounded-[1.6rem]"
         role="dialog"
         aria-modal="true"
         aria-label={card.alt}
-        transition={
-          reduceMotion ? { duration: 0 } : CARD_LAYOUT_TWEEN
-        }
+        initial={reduceMotion ? false : CARD_DIALOG_CLOSED}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={CARD_DIALOG_CLOSED}
+        transition={reduceMotion ? { duration: 0 } : CARD_DIALOG_TWEEN}
       >
         <div className="relative min-h-0 bg-[#d5d7cd]">
           <CardMedia
@@ -129,7 +127,7 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
           <span aria-hidden="true">×</span>
         </button>
       </motion.article>
-    </motion.div>,
+    </div>,
     document.body,
   );
 }
