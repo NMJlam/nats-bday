@@ -5,9 +5,13 @@ import matter from "gray-matter";
 
 import { CATEGORY_IDS, type CategoryId } from "./categories";
 
+export type CardMedia =
+  | { type: "image"; src: string }
+  | { type: "video"; src: string; poster?: string };
+
 export type Card = {
   id: string;
-  image: string;
+  media: CardMedia;
   category: CategoryId;
   message: string;
   alt: string;
@@ -49,16 +53,18 @@ function slugify(value: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function imageDetails(image: unknown, cardNumber: number) {
-  if (typeof image !== "string" || !image.startsWith("imgs/")) {
+function assetDetails(asset: unknown, field: string, cardNumber: number) {
+  if (typeof asset !== "string" || !asset.startsWith("imgs/")) {
     throw new Error(
-      `Card ${cardNumber} has an invalid image. Expected a path under content/imgs/.`,
+      `Card ${cardNumber} has an invalid ${field}. Expected a path under content/imgs/.`,
     );
   }
 
-  const normalized = path.posix.normalize(image);
+  const normalized = path.posix.normalize(asset);
   if (!normalized.startsWith("imgs/") || normalized.includes("..")) {
-    throw new Error(`Card ${cardNumber} image escapes content/imgs/: ${image}`);
+    throw new Error(
+      `Card ${cardNumber} ${field} escapes content/imgs/: ${asset}`,
+    );
   }
 
   const filename = path.posix.basename(normalized);
@@ -66,6 +72,52 @@ function imageDetails(image: unknown, cardNumber: number) {
   return {
     altFromFilename: filename.replace(path.posix.extname(filename), ""),
     publicPath: `/content-imgs/${normalized.slice("imgs/".length)}`,
+  };
+}
+
+function mediaDetails(
+  data: Record<string, unknown>,
+  cardNumber: number,
+): { media: CardMedia; altFromFilename: string } {
+  const hasImage = data.image !== undefined;
+  const hasVideo = data.video !== undefined;
+
+  if (hasImage === hasVideo) {
+    throw new Error(
+      `Card ${cardNumber} must define exactly one of image or video.`,
+    );
+  }
+
+  if (hasImage) {
+    if (data.poster !== undefined) {
+      throw new Error(`Card ${cardNumber} poster is only valid with video.`);
+    }
+
+    const { altFromFilename, publicPath } = assetDetails(
+      data.image,
+      "image",
+      cardNumber,
+    );
+
+    return {
+      altFromFilename,
+      media: { type: "image", src: publicPath },
+    };
+  }
+
+  const { altFromFilename, publicPath } = assetDetails(
+    data.video,
+    "video",
+    cardNumber,
+  );
+  const poster =
+    data.poster === undefined
+      ? undefined
+      : assetDetails(data.poster, "poster", cardNumber).publicPath;
+
+  return {
+    altFromFilename,
+    media: { type: "video", src: publicPath, ...(poster ? { poster } : {}) },
   };
 }
 
@@ -92,10 +144,7 @@ export function parseCards(source: string): Card[] {
       );
     }
 
-    const { altFromFilename, publicPath } = imageDetails(
-      parsed.data.image,
-      cardNumber,
-    );
+    const { altFromFilename, media } = mediaDetails(parsed.data, cardNumber);
     const firstHeading = firstHeadingText(message);
     const leadingHeading = leadingHeadingText(message);
     const baseId = firstHeading
@@ -107,7 +156,7 @@ export function parseCards(source: string): Card[] {
 
     return {
       id: duplicateNumber === 1 ? idRoot : `${idRoot}-${duplicateNumber}`,
-      image: publicPath,
+      media,
       category,
       message,
       alt: leadingHeading

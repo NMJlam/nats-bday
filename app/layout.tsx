@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     default: "Field Notes",
     template: "%s · Field Notes",
   },
-  description: "A gallery of images, observations, and small stories.",
+  description: "A gallery of images, videos, observations, and small stories.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

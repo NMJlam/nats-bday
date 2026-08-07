@@ -12,7 +12,7 @@ import { CategoriesGallery } from "./CategoriesGallery";
 const cards: Card[] = [
   {
     id: "coast",
-    image: "/content-imgs/coastal-morning.svg",
+    media: { type: "image", src: "/content-imgs/coastal-morning.svg" },
     category: "stitch-stitch-stitch",
     message:
       "# Coast\n\nA travel note.\n\n![Cliffs](imgs/coastal-morning.svg)\n\n```js\nconst answer = 42;\n```",
@@ -20,7 +20,11 @@ const cards: Card[] = [
   },
   {
     id: "table",
-    image: "/content-imgs/citrus-table.svg",
+    media: {
+      type: "video",
+      src: "/content-imgs/citrus-table.mp4",
+      poster: "/content-imgs/citrus-table.svg",
+    },
     category: "acne",
     message: "# Table\n\nA food note.",
     alt: "Table",
@@ -91,5 +95,30 @@ describe("gallery interactions", () => {
     expect(screen.queryByRole("button", { name: "Open Table" })).toBeNull();
     expect(screen.getByText("Stitch stitch stitch collection · 1 card")).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
+  });
+
+  it("shows a quiet video preview and controls in the expanded card", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<CardGrid cards={cards} />);
+
+    const preview = container.querySelector("video");
+    expect(preview).toBeTruthy();
+    expect(preview?.muted).toBe(true);
+    expect(preview?.loop).toBe(true);
+    expect(preview?.controls).toBe(false);
+    expect(preview?.getAttribute("poster")).toBe(
+      "/content-imgs/citrus-table.svg",
+    );
+
+    await user.click(screen.getByRole("button", { name: "Open Table" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Table" });
+    const player = dialog.querySelector("video");
+    expect(player).toBeTruthy();
+    expect(player?.controls).toBe(true);
+    expect(player?.autoplay).toBe(false);
+    expect(player?.getAttribute("src")).toBe(
+      "/content-imgs/citrus-table.mp4",
+    );
   });
 });

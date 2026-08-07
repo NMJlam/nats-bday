@@ -5,21 +5,21 @@ import { parseCards, shuffleCards, type Card } from "./cards";
 const shuffleCandidates: Card[] = [
   {
     id: "one",
-    image: "/content-imgs/one.svg",
+    media: { type: "image", src: "/content-imgs/one.svg" },
     category: "bananas",
     message: "First card",
     alt: "One",
   },
   {
     id: "two",
-    image: "/content-imgs/two.svg",
+    media: { type: "image", src: "/content-imgs/two.svg" },
     category: "acne",
     message: "Second card",
     alt: "Two",
   },
   {
     id: "three",
-    image: "/content-imgs/three.svg",
+    media: { type: "image", src: "/content-imgs/three.svg" },
     category: "stitch-stitch-stitch",
     message: "Third card",
     alt: "Three",
@@ -52,14 +52,14 @@ Supper notes.
     expect(cards).toHaveLength(2);
     expect(cards[0]).toMatchObject({
       id: "coastal-morning",
-      image: "/content-imgs/coast.svg",
+      media: { type: "image", src: "/content-imgs/coast.svg" },
       category: "stitch-stitch-stitch",
       alt: "Coastal Morning",
     });
     expect(cards[0].message).toContain("Before the rule.\n\n---\n\nAfter the rule.");
     expect(cards[1]).toMatchObject({
       id: "card-2",
-      image: "/content-imgs/supper.svg",
+      media: { type: "image", src: "/content-imgs/supper.svg" },
       category: "acne",
       alt: "supper",
     });
@@ -88,6 +88,46 @@ An opening paragraph.
 
     expect(card.alt).toBe("quiet garden");
     expect(card.id).toBe("a-later-heading");
+  });
+
+  it("parses a video card with an optional poster", () => {
+    const [card] = parseCards(`---
+video: imgs/coastal-walk.mp4
+poster: imgs/coastal-walk.jpg
+category: bananas
+---
+# Coastal Walk
+`);
+
+    expect(card).toMatchObject({
+      id: "coastal-walk",
+      media: {
+        type: "video",
+        src: "/content-imgs/coastal-walk.mp4",
+        poster: "/content-imgs/coastal-walk.jpg",
+      },
+      alt: "Coastal Walk",
+    });
+  });
+
+  it("requires exactly one primary media field", () => {
+    expect(() =>
+      parseCards(`---
+image: imgs/coast.jpg
+video: imgs/coast.mp4
+category: acne
+---
+# Coast
+`),
+    ).toThrow("Card 1 must define exactly one of image or video");
+
+    expect(() =>
+      parseCards(`---
+category: acne
+---
+# Missing media
+`),
+    ).toThrow("Card 1 must define exactly one of image or video");
   });
 });
 

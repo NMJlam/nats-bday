@@ -12,6 +12,7 @@ import remarkGfm from "remark-gfm";
 import type { Card } from "@/lib/cards";
 
 import { CARD_LAYOUT_TWEEN } from "./animation";
+import { CardMedia } from "./CardMedia";
 
 type CardExpandProps = {
   card: Card;
@@ -76,12 +77,12 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
           reduceMotion ? { duration: 0 } : CARD_LAYOUT_TWEEN
         }
       >
-        <div className="relative min-h-0 bg-[#d5d7cd] [&_img]:object-cover">
-          <Image
-            src={card.image}
+        <div className="relative min-h-0 bg-[#d5d7cd]">
+          <CardMedia
+            media={card.media}
             alt={card.alt}
-            fill
             sizes="(max-width: 767px) 92vw, 45vw"
+            mode="player"
           />
         </div>
         <div className="overflow-y-auto px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2rem,4vw,4.5rem)] [overscroll-behavior:contain] max-sm:px-5 max-sm:pt-8 max-sm:pb-12">

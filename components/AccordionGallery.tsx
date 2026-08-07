@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { Card } from "@/lib/cards";
+
+import { CardMedia } from "./CardMedia";
 
 type AccordionGalleryProps = {
   cards: Card[];
@@ -55,11 +56,9 @@ export function AccordionGallery({
               transition={{ duration: reduceMotion ? 0 : 0.42, ease: "easeOut" }}
             >
               {representative ? (
-                <Image
-                  src={representative.image}
+                <CardMedia
+                  media={representative.media}
                   alt=""
-                  fill
-                  className="object-cover"
                   sizes="(max-width: 767px) 28vw, 18vw"
                 />
               ) : (

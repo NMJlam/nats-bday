@@ -17,4 +17,4 @@ await Promise.all(
   ),
 );
 
-console.log(`Copied ${entries.length} content image${entries.length === 1 ? "" : "s"}.`);
+console.log(`Copied ${entries.length} content asset${entries.length === 1 ? "" : "s"}.`);

@@ -8,7 +8,7 @@ export default function Home() {
       <GradientWaves variant="full" />
       <div className="relative z-3 grid max-w-[980px] gap-6">
         <p className="m-0 text-xs font-bold tracking-[0.17em] text-[#65736c] uppercase">
-          Images, messages, moments
+          Images, videos, moments
         </p>
         <h1 className="m-0 max-w-[900px] font-serif text-[clamp(3.4rem,8vw,7.8rem)] leading-[0.88] font-normal tracking-[-0.055em]">
           Field Notes

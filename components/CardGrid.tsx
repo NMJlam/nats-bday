@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import {
   AnimatePresence,
   LayoutGroup,
@@ -13,6 +12,7 @@ import type { Card } from "@/lib/cards";
 
 import { CARD_LAYOUT_TWEEN } from "./animation";
 import { CardExpand } from "./CardExpand";
+import { CardMedia } from "./CardMedia";
 
 type CardGridProps = {
   cards: Card[];
@@ -124,10 +124,9 @@ export function CardGrid({ cards }: CardGridProps) {
                       reduceMotion ? { duration: 0 } : CARD_LAYOUT_TWEEN
                     }
                   >
-                    <Image
-                      src={card.image}
+                    <CardMedia
+                      media={card.media}
                       alt={card.alt}
-                      fill
                       sizes="(max-width: 639px) 92vw, (max-width: 1023px) 45vw, 30vw"
                     />
                   </motion.div>
