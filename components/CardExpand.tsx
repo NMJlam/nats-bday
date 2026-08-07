@@ -11,7 +11,7 @@ import remarkGfm from "remark-gfm";
 
 import type { Card } from "@/lib/cards";
 
-import { CARD_LAYOUT_SPRING } from "./animation";
+import { CARD_LAYOUT_TWEEN } from "./animation";
 
 type CardExpandProps = {
   card: Card;
@@ -73,7 +73,7 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
         aria-modal="true"
         aria-label={card.alt}
         transition={
-          reduceMotion ? { duration: 0 } : CARD_LAYOUT_SPRING
+          reduceMotion ? { duration: 0 } : CARD_LAYOUT_TWEEN
         }
       >
         <div className="relative min-h-0 bg-[#d5d7cd] [&_img]:object-cover">
