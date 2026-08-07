@@ -11,7 +11,7 @@ All cards live in [`content/card.md`](content/card.md). Add each image under
 ```md
 ---
 image: imgs/example.jpg
-category: travel
+category: stitch-stitch-stitch
 ---
 # Card heading
 

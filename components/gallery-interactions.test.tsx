@@ -13,7 +13,7 @@ const cards: Card[] = [
   {
     id: "coast",
     image: "/content-imgs/coastal-morning.svg",
-    category: "travel",
+    category: "stitch-stitch-stitch",
     message:
       "# Coast\n\nA travel note.\n\n![Cliffs](imgs/coastal-morning.svg)\n\n```js\nconst answer = 42;\n```",
     alt: "Coast",
@@ -21,7 +21,7 @@ const cards: Card[] = [
   {
     id: "table",
     image: "/content-imgs/citrus-table.svg",
-    category: "food",
+    category: "acne",
     message: "# Table\n\nA food note.",
     alt: "Table",
   },
@@ -82,11 +82,14 @@ describe("gallery interactions", () => {
 
     expect(screen.getAllByRole("button", { name: /^Open / })).toHaveLength(2);
 
-    await user.click(screen.getByRole("button", { name: "Travel" }));
+    await user.click(
+      screen.getByRole("button", { name: "Stitch stitch stitch" }),
+    );
 
     expect(screen.getAllByRole("button", { name: /^Open / })).toHaveLength(1);
     expect(screen.getByRole("button", { name: "Open Coast" })).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Open Table" })).toBeNull();
+    expect(screen.getByText("Stitch stitch stitch collection · 1 card")).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
   });
 });

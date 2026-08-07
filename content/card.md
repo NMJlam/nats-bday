@@ -6,7 +6,7 @@ Markdown horizontal rules inside messages are safe.
 
 ---
 image: imgs/coastal-morning.svg
-category: travel
+category: stitch-stitch-stitch
 ---
 # Coastal Morning
 
@@ -25,7 +25,7 @@ themselves loudly; this one arrived as salt air and a pale line of sun.
 
 ---
 image: imgs/citrus-table.svg
-category: food
+category: acne
 ---
 # A Table in August
 
@@ -40,7 +40,7 @@ afternoon that lets lunch drift into dinner.
 
 ---
 image: imgs/blue-study.svg
-category: art
+category: hospo-kms
 ---
 # Study in Blue
 
@@ -57,7 +57,7 @@ The result was less about blue than about **attention**.
 
 ---
 image: imgs/night-signal.svg
-category: music
+category: misc
 ---
 # Night Signal
 
@@ -71,7 +71,7 @@ A small playlist for late trains and bright windows:
 
 ---
 image: imgs/garden-letter.svg
-category: life
+category: bananas
 ---
 # A Letter from the Garden
 

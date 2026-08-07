@@ -1,9 +1,10 @@
 export const CATEGORIES = [
-  { id: "travel", label: "Travel" },
-  { id: "food", label: "Food" },
-  { id: "art", label: "Art" },
-  { id: "music", label: "Music" },
-  { id: "life", label: "Life" },
+  { id: "stitch-stitch-stitch", label: "Stitch stitch stitch" },
+  { id: "acne", label: "Acne" },
+  { id: "hospo-kms", label: "Hospo kms" },
+  { id: "misc", label: "Misc" },
+  { id: "bananas", label: "Bananas" },
+  { id: "nathan", label: "Nathan" },
 ] as const;
 
 export type CategoryId = (typeof CATEGORIES)[number]["id"];

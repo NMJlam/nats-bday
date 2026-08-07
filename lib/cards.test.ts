@@ -6,21 +6,21 @@ const shuffleCandidates: Card[] = [
   {
     id: "one",
     image: "/content-imgs/one.svg",
-    category: "life",
+    category: "bananas",
     message: "First card",
     alt: "One",
   },
   {
     id: "two",
     image: "/content-imgs/two.svg",
-    category: "food",
+    category: "acne",
     message: "Second card",
     alt: "Two",
   },
   {
     id: "three",
     image: "/content-imgs/three.svg",
-    category: "travel",
+    category: "stitch-stitch-stitch",
     message: "Third card",
     alt: "Three",
   },
@@ -32,7 +32,7 @@ describe("parseCards", () => {
 
 ---
 image: imgs/coast.svg
-category: travel
+category: stitch-stitch-stitch
 ---
 # Coastal Morning
 
@@ -44,7 +44,7 @@ After the rule.
 
 ---
 image: imgs/supper.svg
-category: food
+category: acne
 ---
 Supper notes.
 `);
@@ -53,14 +53,14 @@ Supper notes.
     expect(cards[0]).toMatchObject({
       id: "coastal-morning",
       image: "/content-imgs/coast.svg",
-      category: "travel",
+      category: "stitch-stitch-stitch",
       alt: "Coastal Morning",
     });
     expect(cards[0].message).toContain("Before the rule.\n\n---\n\nAfter the rule.");
     expect(cards[1]).toMatchObject({
       id: "card-2",
       image: "/content-imgs/supper.svg",
-      category: "food",
+      category: "acne",
       alt: "supper",
     });
   });
@@ -79,7 +79,7 @@ category: unknown
   it("uses the filename for alt text when an H1 does not begin the message", () => {
     const [card] = parseCards(`---
 image: imgs/quiet-garden.svg
-category: life
+category: bananas
 ---
 An opening paragraph.
 
