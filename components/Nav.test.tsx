@@ -18,6 +18,7 @@ describe("Nav", () => {
 
     expect(logo).toBeTruthy();
     expect(logo?.getAttribute("src")).toContain("icon.png");
+    expect(homeLink.textContent).toContain("Home");
     expect(homeLink.textContent).not.toContain("HB");
     expect(homeLink.classList.contains("rounded-full")).toBe(false);
     expect(homeLink.classList.contains("border")).toBe(false);
@@ -28,14 +29,17 @@ describe("Nav", () => {
     ).toBeNull();
   });
 
-  it("links Gallery to the homepage reveal and keeps Categories separate", () => {
+  it("links Gallery to the category gallery", () => {
     render(<Nav />);
 
+    const navigation = within(screen.getByRole("navigation"));
+
+    expect(navigation.getAllByRole("link")).toHaveLength(1);
     expect(
-      screen.getByRole("link", { name: "Gallery" }).getAttribute("href"),
-    ).toBe("/#gallery");
-    expect(
-      screen.getByRole("link", { name: "Categories" }).getAttribute("href"),
+      navigation.getByRole("link", { name: "Gallery" }).getAttribute("href"),
     ).toBe("/categories");
+    expect(
+      navigation.queryByRole("link", { name: "Categories" }),
+    ).toBeNull();
   });
 });
