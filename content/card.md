@@ -5,69 +5,40 @@ Markdown horizontal rules inside messages are safe.
 -->
 
 ---
-image: imgs/coastal-morning.svg
-category: stitch-stitch-stitch
----
-# Coastal Morning
-
-The road bent toward the water just as the fog lifted. Some trips announce
-themselves loudly; this one arrived as salt air and a pale line of sun.
-
-> Keep a little room in the itinerary for the place you did not plan to find.
-
----
-
-**Field notes**
-
-- [x] Take the long way
-- [x] Stop for the view
-- [ ] Come back in winter
-
----
-image: imgs/citrus-table.svg
-category: acne
----
-# A Table in August
-
-Nothing complicated: ripe citrus, torn herbs, warm bread, and the kind of
-afternoon that lets lunch drift into dinner.
-
-| On the table | Best with |
-| --- | --- |
-| Blood orange | Olive oil + salt |
-| Sourdough | Cultured butter |
-| Mint | Everything |
-
----
-image: imgs/blue-study.svg
-category: hospo-kms
----
-# Study in Blue
-
-An exercise in noticing what changes when a single color is asked to carry
-the whole composition.
-
-```text
-ultramarine + distance
-cerulean    + daylight
-indigo      + memory
-```
-
-The result was less about blue than about **attention**.
-
----
-image: imgs/night-signal.svg
+image: imgs/DSC06500.JPG
 category: misc
 ---
-# Night Signal
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-A small playlist for late trains and bright windows:
+---
+image: imgs/IMG_0263.JPEG
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-1. Start with a pulse.
-2. Let the bassline find the horizon.
-3. Leave one quiet song at the end.
+---
+image: imgs/IMG_0496.JPG
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-~~Skip the encore.~~ Never skip the encore.
+---
+image: imgs/IMG_7085.JPG
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+---
+image: imgs/IMG_7113.JPG
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+---
+image: imgs/IMG_8575.JPG
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/garden-letter.svg
