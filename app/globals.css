@@ -21,99 +21,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.landing-content,
-body > header {
-  transition:
-    opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 650ms;
-}
-
-.landing-intro-active {
-  overflow: hidden;
-}
-
-.landing-intro-active .landing-content,
-.landing-intro-active body > header {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.landing-intro {
-  position: fixed;
-  z-index: 100;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  color: #17251f;
-  background:
-    radial-gradient(circle at 50% 45%, rgba(255, 250, 239, 0.74), transparent 34%),
-    linear-gradient(145deg, #f0d5b8 0%, #c5d4c3 48%, #79a5a0 100%);
-  transition:
-    opacity 650ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 650ms;
-}
-
-.landing-intro--exiting {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.landing-intro__halo {
-  position: absolute;
-  width: min(78vw, 50rem);
-  aspect-ratio: 1;
-  border: 1px solid rgba(23, 37, 31, 0.18);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 12vw rgba(255, 255, 255, 0.04),
-    0 0 0 24vw rgba(255, 255, 255, 0.025);
-  animation: intro-breathe 2.8s ease-in-out infinite alternate;
-}
-
-.landing-intro__content {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: clamp(0.8rem, 2vw, 1.35rem);
-  padding: 2rem;
-}
-
-.landing-intro__eyebrow,
-.landing-intro__date {
-  margin: 0;
-  font-size: clamp(0.65rem, 1.2vw, 0.8rem);
-  font-weight: 700;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-.landing-intro__count {
-  min-width: 5ch;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(5rem, 18vw, 14rem);
-  font-variant-numeric: tabular-nums lining-nums;
-  font-weight: 400;
-  letter-spacing: -0.075em;
-  line-height: 0.8;
-  text-align: center;
-}
-
-.landing-intro__date {
-  color: rgba(23, 37, 31, 0.66);
-}
-
-@keyframes intro-breathe {
-  from {
-    transform: scale(0.96);
-    opacity: 0.58;
-  }
-  to {
-    transform: scale(1.04);
-    opacity: 1;
-  }
-}
-
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -238,10 +145,6 @@ a {
   }
 
   .wave {
-    animation: none;
-  }
-
-  .landing-intro__halo {
     animation: none;
   }
 }
