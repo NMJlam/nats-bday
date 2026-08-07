@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function CategoriesPage() {
   await connection();
-  const cards = shuffleCards(getAllCards());
+  const cards = shuffleCards(await getAllCards());
 
   return (
     <CollectionPage

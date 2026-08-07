@@ -15,6 +15,19 @@ vi.mock("next/server", () => ({
   connection: vi.fn(async () => undefined),
 }));
 
+vi.mock("@/lib/cards", () => ({
+  getAllCards: vi.fn(async () => [
+    {
+      id: "a",
+      media: { type: "image", src: "/content-imgs/a.svg" },
+      category: "nathan",
+      message: "hi",
+      alt: "A",
+    },
+  ]),
+  shuffleCards: (cards: unknown[]) => cards,
+}));
+
 vi.mock("@/components/GalleryReveal", () => ({
   GalleryReveal: () => (
     <section id="gallery">

@@ -1,9 +1,11 @@
-import { readFileSync } from "node:fs";
 import path from "node:path";
 
+import { desc } from "drizzle-orm";
 import matter from "gray-matter";
 
 import { CATEGORY_IDS, type CategoryId } from "./categories";
+import { getDb } from "./db";
+import { cards as cardsTable, type CardRow } from "./db/schema";
 
 export type CardMedia =
   | { type: "image"; src: string }
@@ -15,6 +17,7 @@ export type Card = {
   category: CategoryId;
   message: string;
   alt: string;
+  ownerId?: string;
 };
 
 const METADATA_BLOCK =
@@ -187,8 +190,32 @@ export function shuffleCards(
   return shuffled;
 }
 
-export function getAllCards(): Card[] {
-  const cardFile = path.join(process.cwd(), "content", "card.md");
+export function rowToCard(row: CardRow): Card {
+  const media: CardMedia =
+    row.mediaType === "video"
+      ? {
+          type: "video",
+          src: row.mediaUrl,
+          ...(row.posterUrl ? { poster: row.posterUrl } : {}),
+        }
+      : { type: "image", src: row.mediaUrl };
 
-  return parseCards(readFileSync(cardFile, "utf8"));
+  return {
+    id: row.id,
+    media,
+    category: row.category as CategoryId,
+    message: row.message,
+    alt: row.alt,
+    ownerId: row.ownerId,
+  };
+}
+
+export async function getAllCards(): Promise<Card[]> {
+  const db = getDb();
+  const rows = await db
+    .select()
+    .from(cardsTable)
+    .orderBy(desc(cardsTable.createdAt));
+
+  return rows.map(rowToCard);
 }

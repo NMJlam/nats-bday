@@ -141,32 +141,6 @@ a {
   }
 }
 
-.markdown-body {
-  color: #24292f;
-  background: transparent;
-  font-size: 1rem;
-}
-
-.markdown-body h1:first-child {
-  margin-top: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2rem, 4vw, 3.7rem);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
-
-.markdown-image {
-  display: block;
-  margin: 1rem 0;
-}
-
-.markdown-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 0.65rem;
-}
-
 @media (max-width: 560px) {
   :root {
     --nav-height: 4rem;

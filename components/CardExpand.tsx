@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
-import type { ImageLoader } from "next/image";
+import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import rehypeHighlight from "rehype-highlight";
-import remarkGfm from "remark-gfm";
+import { useSession } from "next-auth/react";
 
 import type { Card } from "@/lib/cards";
 
 import { CARD_DIALOG_CLOSED, CARD_DIALOG_TWEEN } from "./animation";
+import { CardEditor } from "./CardEditor";
 import { CardMedia } from "./CardMedia";
 
 type CardExpandProps = {
@@ -19,17 +17,18 @@ type CardExpandProps = {
   onClose: () => void;
 };
 
-const passthroughImageLoader: ImageLoader = ({ src }) => src;
-
-function markdownImagePath(source: string) {
-  return source.startsWith("imgs/")
-    ? `/content-imgs/${source.slice("imgs/".length)}`
-    : source;
-}
-
 export function CardExpand({ card, onClose }: CardExpandProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const canEdit = Boolean(
+    session?.user &&
+      (session.user.isAdmin || session.user.id === card.ownerId),
+  );
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -49,6 +48,41 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
+
+  async function handleDelete() {
+    if (!window.confirm("Delete this card? This cannot be undone.")) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      const response = await fetch(`/api/cards/${card.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Delete failed");
+      }
+      onClose();
+      router.refresh();
+    } catch {
+      setDeleting(false);
+      window.alert("Could not delete this card. Please try again.");
+    }
+  }
+
+  if (editing) {
+    return (
+      <CardEditor
+        mode="edit"
+        card={card}
+        onClose={() => setEditing(false)}
+        onSaved={() => {
+          setEditing(false);
+          onClose();
+          router.refresh();
+        }}
+      />
+    );
+  }
 
   return createPortal(
     <div
@@ -83,39 +117,29 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
             mode="player"
           />
         </div>
-        <div className="overflow-y-auto px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2rem,4vw,4.5rem)] [overscroll-behavior:contain] max-sm:px-5 max-sm:pt-8 max-sm:pb-12">
-          <div className="markdown-body" data-theme="light">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
-              components={{
-                img({ src, alt }) {
-                  if (!src || typeof src !== "string") {
-                    return null;
-                  }
-
-                  const resolvedSource = markdownImagePath(src);
-                  const external = /^https?:\/\//.test(resolvedSource);
-
-                  return (
-                    <span className="markdown-image">
-                      <Image
-                        src={resolvedSource}
-                        alt={alt ?? ""}
-                        width={1200}
-                        height={800}
-                        sizes="(max-width: 767px) 84vw, 38vw"
-                        loader={external ? passthroughImageLoader : undefined}
-                        unoptimized={external}
-                      />
-                    </span>
-                  );
-                },
-              }}
-            >
-              {card.message}
-            </ReactMarkdown>
-          </div>
+        <div className="flex min-h-0 flex-col overflow-y-auto px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2rem,4vw,4.5rem)] [overscroll-behavior:contain] max-sm:px-5 max-sm:pt-8 max-sm:pb-12">
+          <p className="m-0 flex-1 font-serif text-[1.05rem] leading-[1.7] whitespace-pre-wrap text-[#17251f]">
+            {card.message}
+          </p>
+          {canEdit ? (
+            <div className="mt-8 flex gap-3 border-t border-[rgba(23,37,31,0.12)] pt-5">
+              <button
+                type="button"
+                onClick={() => setEditing(true)}
+                className="cursor-pointer rounded-full border border-[rgba(23,37,31,0.2)] px-5 py-2 text-xs font-bold tracking-[0.1em] text-[#17251f] uppercase hover:bg-[rgba(23,37,31,0.05)] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={deleting}
+                className="cursor-pointer rounded-full border border-[rgba(138,45,22,0.35)] px-5 py-2 text-xs font-bold tracking-[0.1em] text-[#8a2d16] uppercase hover:bg-[rgba(138,45,22,0.06)] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </button>
+            </div>
+          ) : null}
         </div>
         <button
           ref={closeButtonRef}
