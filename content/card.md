@@ -6,42 +6,42 @@ Markdown horizontal rules inside messages are safe.
 
 ---
 image: imgs/DSC06500.JPG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/IMG_0263.JPEG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/IMG_0496.JPG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/IMG_7085.JPG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/IMG_7113.JPG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 image: imgs/IMG_8575.JPG
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
 video: imgs/IMG_8515.MP4
-category: misc
+category: nathan
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
