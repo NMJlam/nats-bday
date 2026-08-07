@@ -11,7 +11,7 @@ import {
 
 import type { Card } from "@/lib/cards";
 
-import { CARD_LAYOUT_SPRING } from "./animation";
+import { CARD_CLOSE_TWEEN } from "./animation";
 import { CardExpand } from "./CardExpand";
 
 type CardGridProps = {
@@ -20,13 +20,22 @@ type CardGridProps = {
 
 export function CardGrid({ cards }: CardGridProps) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
+  const [closingCardId, setClosingCardId] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const reduceMotion = useReducedMotion();
 
   const closeCard = useCallback(() => {
-    setActiveCard(null);
+    setActiveCard((current) => {
+      if (reduceMotion) {
+        setClosingCardId(null);
+      } else if (current) {
+        setClosingCardId(current.id);
+      }
+
+      return null;
+    });
     window.requestAnimationFrame(() => triggerRef.current?.focus());
-  }, []);
+  }, [reduceMotion]);
   const expandedCard = activeCard ? (
     <CardExpand key={activeCard.id} card={activeCard} onClose={closeCard} />
   ) : null;
@@ -72,10 +81,16 @@ export function CardGrid({ cards }: CardGridProps) {
                 <motion.div
                   className="relative aspect-4/3 overflow-hidden rounded-[1.4rem] bg-[#d5d7cd] shadow-[0_18px_45px_rgba(30,52,42,0.11)] transition-[box-shadow,transform] duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_24px_56px_rgba(30,52,42,0.2)] [&_img]:object-cover"
                   layoutId={`card-${card.id}`}
+                  style={card.id === closingCardId ? { zIndex: 50 } : undefined}
+                  onLayoutAnimationComplete={() => {
+                    setClosingCardId((current) =>
+                      current === card.id ? null : current,
+                    );
+                  }}
                   transition={
                     reduceMotion
                       ? { duration: 0 }
-                      : CARD_LAYOUT_SPRING
+                      : CARD_CLOSE_TWEEN
                   }
                 >
                   <Image

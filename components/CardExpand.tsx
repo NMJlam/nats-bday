@@ -60,7 +60,10 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
       }}
       initial={reduceMotion ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      exit={{
+        opacity: 0,
+        transition: { duration: reduceMotion ? 0 : 0.15 },
+      }}
       transition={{ duration: reduceMotion ? 0 : 0.24 }}
     >
       <motion.article
