@@ -41,6 +41,12 @@ category: misc
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---
+video: imgs/IMG_8515.MP4
+category: misc
+---
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+---
 image: imgs/garden-letter.svg
 category: bananas
 ---
