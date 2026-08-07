@@ -74,7 +74,9 @@ describe("gallery interactions", () => {
     const opener = screen.getByRole("button", { name: "Open Coast" });
     await user.click(opener);
 
-    expect(screen.getByRole("dialog", { name: "Coast" })).toBeTruthy();
+    const dialog = screen.getByRole("dialog", { name: "Coast" });
+    expect(dialog.className).toContain("border-0");
+    expect(dialog.className).not.toContain("border-white");
     expect(screen.getByRole("heading", { name: "Coast" })).toBeTruthy();
     expect(screen.getByAltText("Cliffs").getAttribute("src")).toContain(
       "/content-imgs/coastal-morning.svg",
