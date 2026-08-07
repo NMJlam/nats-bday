@@ -21,11 +21,7 @@ export function GalleryReveal({ cards }: GalleryRevealProps) {
   const galleryAnchorRef = useRef<HTMLSpanElement>(null);
   const reduceMotion = useReducedMotion();
   const revealProgress = useMotionValue(0);
-  const opacity = useTransform(
-    revealProgress,
-    [0, 0.25, 0.82],
-    [0.08, 0.4, 1],
-  );
+  const opacity = useTransform(revealProgress, [0, 0.25, 0.82], [0.08, 0.4, 1]);
   const scale = useTransform(revealProgress, [0, 0.82], [0.93, 1]);
   const y = useTransform(revealProgress, [0, 0.82], [72, 0]);
   const filter = useTransform(
@@ -92,7 +88,7 @@ export function GalleryReveal({ cards }: GalleryRevealProps) {
             id="gallery-heading"
             className="m-0 max-w-[900px] font-serif text-[clamp(3.1rem,6.5vw,6.8rem)] leading-[0.88] font-normal tracking-[-0.055em]"
           >
-            Your birthday gallery
+            Your birthday album
           </h2>
           <p className="m-0 max-w-2xl font-serif text-[clamp(1rem,1.8vw,1.3rem)] leading-[1.6] text-[#65736c]">
             Each card holds a note. Click to see it :3.
