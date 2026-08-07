@@ -8,7 +8,9 @@ Markdown horizontal rules inside messages are safe.
 image: imgs/DSC06500.JPG
 category: nathan
 ---
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+This is a message from Nathan. **Natalie is such a good gf**
+
+From Nathan
 
 ---
 image: imgs/IMG_0263.JPEG
