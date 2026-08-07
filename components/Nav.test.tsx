@@ -27,4 +27,15 @@ describe("Nav", () => {
       }),
     ).toBeNull();
   });
+
+  it("links Gallery to the homepage reveal and keeps Categories separate", () => {
+    render(<Nav />);
+
+    expect(
+      screen.getByRole("link", { name: "Gallery" }).getAttribute("href"),
+    ).toBe("/#gallery");
+    expect(
+      screen.getByRole("link", { name: "Categories" }).getAttribute("href"),
+    ).toBe("/categories");
+  });
 });

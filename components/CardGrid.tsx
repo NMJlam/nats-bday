@@ -16,9 +16,10 @@ import { CardMedia } from "./CardMedia";
 
 type CardGridProps = {
   cards: Card[];
+  revealOnScroll?: boolean;
 };
 
-export function CardGrid({ cards }: CardGridProps) {
+export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
   const [closingCardId, setClosingCardId] = useState<string | null>(null);
   const closingElevationTimeoutRef = useRef<number | null>(null);
@@ -58,7 +59,9 @@ export function CardGrid({ cards }: CardGridProps) {
           className="m-0 grid list-none grid-cols-1 gap-[clamp(1rem,2vw,1.75rem)] p-0 sm:grid-cols-2 lg:grid-cols-3"
           aria-label="Card gallery"
           initial="hidden"
-          animate="shown"
+          animate={reduceMotion || !revealOnScroll ? "shown" : undefined}
+          whileInView={!reduceMotion && revealOnScroll ? "shown" : undefined}
+          viewport={{ once: true, amount: 0.08 }}
           variants={{
             hidden: {},
             shown: {

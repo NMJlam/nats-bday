@@ -5,7 +5,7 @@ import elephantIcon from "@/app/icon.png";
 import { SITE_TITLE } from "@/lib/site";
 
 const links = [
-  { href: "/gallery", label: "Gallery" },
+  { href: "/#gallery", label: "Gallery" },
   { href: "/categories", label: "Categories" },
 ] as const;
 
