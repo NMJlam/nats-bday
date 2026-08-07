@@ -16,7 +16,7 @@ export default async function CategoriesPage() {
   return (
     <CollectionPage
       eyebrow=">.<"
-      title="Browse by category"
+      title="Why are you so popular?"
       intro="Click to filter by group."
     >
       <CategoriesGallery cards={cards} />
