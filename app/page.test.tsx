@@ -3,6 +3,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { SITE_TITLE } from "@/lib/site";
+
 import Home from "./page";
 
 afterEach(cleanup);
@@ -12,7 +14,7 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "Field Notes" }),
+      screen.getByRole("heading", { level: 1, name: SITE_TITLE }),
     ).toBeTruthy();
     expect(screen.queryByRole("status")).toBeNull();
     expect(screen.queryByText("Days since")).toBeNull();

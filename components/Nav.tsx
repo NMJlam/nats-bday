@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SITE_TITLE } from "@/lib/site";
+
 const links = [
   { href: "/", label: "Home" },
   { href: "/gallery", label: "Gallery" },
@@ -12,9 +14,9 @@ export function Nav() {
       <Link
         className="grid size-10 place-items-center rounded-full border border-[#17251f] font-serif text-xs font-bold tracking-[0.08em] text-[#17251f] no-underline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
         href="/"
-        aria-label="Field Notes home"
+        aria-label={`${SITE_TITLE} home`}
       >
-        FN
+        HB
       </Link>
       <nav aria-label="Main navigation">
         <ul className="m-0 flex list-none gap-4 p-0 sm:gap-[clamp(1rem,3vw,2.5rem)]">
