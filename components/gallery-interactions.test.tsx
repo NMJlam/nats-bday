@@ -105,6 +105,7 @@ describe("gallery interactions", () => {
     expect(preview).toBeTruthy();
     expect(preview?.muted).toBe(true);
     expect(preview?.loop).toBe(true);
+    expect(preview?.autoplay).toBe(false);
     expect(preview?.controls).toBe(false);
     expect(preview?.getAttribute("poster")).toBe(
       "/content-imgs/citrus-table.svg",

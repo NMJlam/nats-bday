@@ -53,7 +53,11 @@ function slugify(value: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function assetDetails(asset: unknown, field: string, cardNumber: number) {
+function assetDetails(
+  asset: unknown,
+  field: "image" | "video" | "poster",
+  cardNumber: number,
+) {
   if (typeof asset !== "string" || !asset.startsWith("imgs/")) {
     throw new Error(
       `Card ${cardNumber} has an invalid ${field}. Expected a path under content/imgs/.`,

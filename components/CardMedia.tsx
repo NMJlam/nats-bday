@@ -52,7 +52,7 @@ export function CardMedia({
     <video
       src={media.src}
       poster={media.poster}
-      autoPlay={!reduceMotion}
+      autoPlay={reduceMotion === false}
       muted
       loop
       playsInline

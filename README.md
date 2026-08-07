@@ -33,8 +33,9 @@ Card message in GitHub-Flavored Markdown.
 ```
 
 Define exactly one of `image` or `video` per card. Video previews are muted,
-looping, and inline; reduced-motion visitors see a still frame or poster. The
-expanded card uses the browser's standard playback controls.
+looping, and inline; they do not autoplay for reduced-motion visitors. Add a
+poster when those visitors should see a static preview. The expanded card uses
+the browser's standard playback controls.
 
 A card boundary is a `---` line followed immediately by `key: value` metadata
 lines and another `---`. Ordinary Markdown horizontal rules inside messages are
