@@ -45,13 +45,3 @@ video: imgs/IMG_8515.MP4
 category: misc
 ---
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
----
-image: imgs/garden-letter.svg
-category: bananas
----
-# A Letter from the Garden
-
-Today the first sweet pea opened. That is the entire news, and it is enough.
-
-Visit [the gallery](/gallery) when you need another small window into the day.
