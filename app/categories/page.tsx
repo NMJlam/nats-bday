@@ -15,9 +15,9 @@ export default async function CategoriesPage() {
 
   return (
     <CollectionPage
-      eyebrow="Browse by feeling"
-      title="Choose a thread"
-      intro="Stretch a collection open, or keep every card together on one wall."
+      eyebrow=">.<"
+      title="Browse by catergory"
+      intro="Click to filter by group."
     >
       <CategoriesGallery cards={cards} />
     </CollectionPage>
