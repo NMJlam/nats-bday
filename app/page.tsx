@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import FoldText from "@/components/FoldText";
 import { LandingSlideshow } from "@/components/LandingSlideshow";
 import { getAllCards } from "@/lib/cards";
 import { SITE_TITLE } from "@/lib/site";
@@ -14,7 +15,21 @@ export default function Home() {
       <LandingSlideshow slides={slides} />
       <div className="relative z-3 grid max-w-[980px] gap-6">
         <h1 className="m-0 max-w-[900px] font-serif text-[clamp(3.4rem,8vw,7.8rem)] leading-[0.88] font-normal tracking-[-0.055em] text-shadow-lg">
-          {SITE_TITLE}
+          <FoldText
+            color="inherit"
+            creaseShading={0.55}
+            duration={0.65}
+            ease="power3.out"
+            fontSize="inherit"
+            fontWeight="inherit"
+            hinge="bottom"
+            perspective={700}
+            splitBy="char"
+            stagger={0.055}
+            style={{ letterSpacing: "inherit", lineHeight: "inherit" }}
+            text={SITE_TITLE}
+            trigger="mount"
+          />
         </h1>
         <p className="m-0 max-w-2xl font-serif text-[clamp(1.05rem,2vw,1.35rem)] leading-[1.55] text-white/90 text-shadow-md">
           A wall of little windows. Open one to find a message from someone who

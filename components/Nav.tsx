@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 
+import elephantIcon from "@/app/icon.png";
 import { SITE_TITLE } from "@/lib/site";
 
 const links = [
-  { href: "/", label: "Home" },
   { href: "/gallery", label: "Gallery" },
   { href: "/categories", label: "Categories" },
 ] as const;
@@ -12,11 +13,20 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 flex h-[var(--nav-height)] items-center justify-between border-b border-white/35 bg-[rgba(243,241,233,0.82)] px-[4vw] backdrop-blur-lg">
       <Link
-        className="grid size-10 place-items-center rounded-full border border-[#17251f] font-serif text-xs font-bold tracking-[0.08em] text-[#17251f] no-underline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+        className="grid size-10 place-items-center no-underline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
         href="/"
         aria-label={`${SITE_TITLE} home`}
       >
-        HB
+        <Image
+          aria-hidden="true"
+          alt=""
+          className="size-10 object-contain"
+          loading="eager"
+          sizes="40px"
+          src={elephantIcon}
+          width={40}
+          height={40}
+        />
       </Link>
       <nav aria-label="Main navigation">
         <ul className="m-0 flex list-none gap-4 p-0 sm:gap-[clamp(1rem,3vw,2.5rem)]">

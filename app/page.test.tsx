@@ -1,11 +1,15 @@
 // @vitest-environment jsdom
 
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { SITE_TITLE } from "@/lib/site";
 
 import Home from "./page";
+
+vi.mock("@/components/FoldText", () => ({
+  default: ({ text }: { text: string }) => <>{text}</>,
+}));
 
 afterEach(cleanup);
 
