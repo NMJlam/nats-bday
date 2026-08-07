@@ -66,7 +66,7 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
         transition={reduceMotion ? { duration: 0 } : CARD_DIALOG_TWEEN}
       />
       <motion.article
-        className="relative z-1 grid h-[94vh] w-full grid-cols-1 grid-rows-[minmax(230px,42%)_minmax(0,58%)] overflow-hidden rounded-[1.15rem] border border-white/25 bg-[#fbfaf5] shadow-[0_45px_120px_rgba(8,15,12,0.42)] md:h-[min(730px,90vh)] md:w-[min(1120px,96vw)] md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:grid-rows-1 md:rounded-[1.6rem]"
+        className="relative z-1 grid h-[94vh] w-full grid-cols-1 grid-rows-[minmax(230px,42%)_minmax(0,58%)] overflow-hidden rounded-[1.15rem] border-0 bg-[#fbfaf5] shadow-[0_45px_120px_rgba(8,15,12,0.42)] md:h-[min(730px,90vh)] md:w-[min(1120px,96vw)] md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:grid-rows-1 md:rounded-[1.6rem]"
         role="dialog"
         aria-modal="true"
         aria-label={card.alt}
