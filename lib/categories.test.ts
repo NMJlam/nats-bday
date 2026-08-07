@@ -8,7 +8,8 @@ describe("categories", () => {
       { id: "stitch-stitch-stitch", label: "Stitch stitch stitch" },
       { id: "acne", label: "Acne" },
       { id: "hospo-kms", label: "Hospo kms" },
-      { id: "misc", label: "Misc" },
+      { id: "em", label: "Em" },
+      { id: "angelica", label: "Angelica" },
       { id: "bananas", label: "Bananas" },
       { id: "nathan", label: "Nathan" },
     ]);
