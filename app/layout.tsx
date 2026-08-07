@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import "github-markdown-css/github-markdown.css";
-import "highlight.js/styles/github.css";
 import "./globals.css";
 
 import { Nav } from "@/components/Nav";
+import { Providers } from "@/components/Providers";
 import { SITE_TITLE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -20,8 +19,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <Nav />
-        {children}
+        <Providers>
+          <Nav />
+          {children}
+        </Providers>
       </body>
     </html>
   );

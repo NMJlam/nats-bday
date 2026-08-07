@@ -9,7 +9,7 @@ import { SITE_TITLE } from "@/lib/site";
 
 export default async function Home() {
   await connection();
-  const cards = getAllCards();
+  const cards = await getAllCards();
   const galleryCards = shuffleCards(cards);
   const slides = cards.flatMap((card) =>
     card.media.type === "image" ? [{ src: card.media.src }] : [],

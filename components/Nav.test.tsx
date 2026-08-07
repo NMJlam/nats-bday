@@ -1,11 +1,23 @@
 // @vitest-environment jsdom
 
+import type { ReactNode } from "react";
 import { cleanup, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { SITE_TITLE } from "@/lib/site";
 
 import { Nav } from "./Nav";
+
+vi.mock("next-auth/react", () => ({
+  useSession: () => ({ data: null, status: "unauthenticated" }),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+  SessionProvider: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }),
+}));
 
 afterEach(cleanup);
 

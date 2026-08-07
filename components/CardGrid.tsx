@@ -19,8 +19,14 @@ type CardGridProps = {
 
 export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
+  const [revealed, setRevealed] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const reduceMotion = useReducedMotion();
+
+  // Once revealed (or when the reveal doesn't apply), keep the list in the
+  // "shown" state so cards added later — e.g. after router.refresh() following a
+  // new submission — inherit "shown" instead of being stranded at opacity 0.
+  const shown = revealed || reduceMotion || !revealOnScroll;
 
   const closeCard = useCallback(() => {
     setActiveCard(null);
@@ -39,8 +45,12 @@ export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
           className="m-0 grid list-none grid-cols-1 gap-[clamp(1rem,2vw,1.75rem)] p-0 sm:grid-cols-2 lg:grid-cols-3"
           aria-label="Card gallery"
           initial="hidden"
-          animate={reduceMotion || !revealOnScroll ? "shown" : undefined}
-          whileInView={!reduceMotion && revealOnScroll ? "shown" : undefined}
+          animate={shown ? "shown" : "hidden"}
+          onViewportEnter={
+            revealOnScroll && !reduceMotion
+              ? () => setRevealed(true)
+              : undefined
+          }
           viewport={{ once: true, amount: 0.08 }}
           variants={{
             hidden: {},

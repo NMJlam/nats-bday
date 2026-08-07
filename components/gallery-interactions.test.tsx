@@ -1,13 +1,23 @@
 // @vitest-environment jsdom
 
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import type { Card } from "@/lib/cards";
 
 import { CardGrid } from "./CardGrid";
 import { CategoriesGallery } from "./CategoriesGallery";
+
+vi.mock("next-auth/react", () => ({
+  useSession: () => ({ data: null, status: "unauthenticated" }),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }),
+}));
 
 const cards: Card[] = [
   {
@@ -77,11 +87,9 @@ describe("gallery interactions", () => {
     const dialog = screen.getByRole("dialog", { name: "Coast" });
     expect(dialog.className).toContain("border-0");
     expect(dialog.className).not.toContain("border-white");
-    expect(screen.getByRole("heading", { name: "Coast" })).toBeTruthy();
-    expect(screen.getByAltText("Cliffs").getAttribute("src")).toContain(
-      "/content-imgs/coastal-morning.svg",
-    );
-    expect(document.querySelector("code.hljs")).toBeTruthy();
+    // Message renders as plain text (no Markdown parsing), preserving the raw
+    // characters the author typed.
+    expect(within(dialog).getByText(/A travel note\./)).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
 
     await user.keyboard("{Escape}");
