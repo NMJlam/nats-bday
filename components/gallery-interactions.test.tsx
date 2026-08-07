@@ -45,6 +45,16 @@ beforeAll(() => {
       dispatchEvent: () => false,
     }),
   });
+  Object.defineProperties(HTMLMediaElement.prototype, {
+    play: {
+      configurable: true,
+      value: () => Promise.resolve(),
+    },
+    pause: {
+      configurable: true,
+      value: () => undefined,
+    },
+  });
 });
 
 afterEach(() => {
@@ -122,4 +132,5 @@ describe("gallery interactions", () => {
       "/content-imgs/citrus-table.mp4",
     );
   });
+
 });

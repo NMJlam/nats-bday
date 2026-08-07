@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
 
@@ -19,6 +20,19 @@ export function CardMedia({
   mode = "preview",
 }: CardMediaProps) {
   const reduceMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (mode !== "preview" || !videoRef.current) {
+      return;
+    }
+
+    if (reduceMotion === false) {
+      void videoRef.current.play().catch(() => undefined);
+    } else {
+      videoRef.current.pause();
+    }
+  }, [mode, reduceMotion]);
 
   if (media.type === "image") {
     return (
@@ -50,9 +64,9 @@ export function CardMedia({
 
   return (
     <video
+      ref={videoRef}
       src={media.src}
       poster={media.poster}
-      autoPlay={reduceMotion === false}
       muted
       loop
       playsInline
