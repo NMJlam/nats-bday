@@ -1,1 +1,1 @@
-export const SITE_TITLE = "Happy Birthday";
+export const SITE_TITLE = "Happy Birthday Nat!";

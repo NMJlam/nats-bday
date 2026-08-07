@@ -15,9 +15,9 @@ export default async function GalleryPage() {
 
   return (
     <CollectionPage
-      eyebrow={`The complete collection · ${cards.length} cards`}
-      title="The whole wall"
-      intro="Each image or video holds a note. Choose one to bring it forward, then close it to return to your place."
+      eyebrow={`All · ${cards.length} cards`}
+      title="Your birthday gallery"
+      intro="Each card holds a note. Click to see it :3."
     >
       <CardGrid cards={cards} />
     </CollectionPage>
