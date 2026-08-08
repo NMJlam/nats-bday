@@ -83,7 +83,12 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
         card={card}
         onClose={() => setEditing(false)}
         onSaved={() => {
-          setEditing(false);
+          // Keep `editing` true while closing. Flipping back to the expanded
+          // view remounts the animated motion.article into an already-exiting
+          // AnimatePresence context, which never finishes its exit and leaves a
+          // frozen overlay whose close button and backdrop no longer respond.
+          // Closing from the editor (a non-animated subtree) lets
+          // AnimatePresence unmount CardExpand cleanly.
           onClose();
           router.refresh();
         }}
