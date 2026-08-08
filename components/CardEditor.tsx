@@ -48,6 +48,7 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const objectUrlRef = useRef<string | null>(null);
 
@@ -71,27 +72,21 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
     };
   }, [onClose]);
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function acceptFile(selected: File): boolean {
     setError(null);
-    const selected = event.target.files?.[0];
-    if (!selected) {
-      return;
-    }
 
     const kind = mediaKindFromMime(selected.type);
     if (!kind) {
       setError(
         `Unsupported file type. Please use ${SUPPORTED_LABEL}. (HEIC photos and .MOV videos are not supported — export to JPG/MP4 first.)`,
       );
-      event.target.value = "";
-      return;
+      return false;
     }
 
     if (selected.size > maxBytesFor(kind)) {
       const limitMb = Math.round(maxBytesFor(kind) / (1024 * 1024));
       setError(`That ${kind} is too large. Max ${limitMb} MB.`);
-      event.target.value = "";
-      return;
+      return false;
     }
 
     if (objectUrlRef.current) {
@@ -102,6 +97,32 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
     setFile(selected);
     setPreviewUrl(url);
     setPreviewKind(kind);
+    return true;
+  }
+
+  function openFilePicker() {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
+  }
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const selected = event.target.files?.[0];
+    if (!selected) {
+      return;
+    }
+
+    acceptFile(selected);
+    event.target.value = "";
+  }
+
+  function handleDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const selected = event.dataTransfer.files[0];
+    if (selected) {
+      acceptFile(selected);
+    }
   }
 
   function insertEmoji(emoji: string) {
@@ -210,135 +231,154 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
       />
       <form
         onSubmit={handleSubmit}
-        className="relative z-1 grid max-h-[94vh] w-full max-w-[560px] gap-4 overflow-y-auto rounded-[1.4rem] bg-[#fbfaf5] p-[clamp(1.25rem,4vw,2.5rem)] shadow-[0_45px_120px_rgba(8,15,12,0.42)] [overscroll-behavior:contain]"
+        className="relative z-1 grid h-[94vh] w-full grid-cols-1 grid-rows-[minmax(230px,42%)_minmax(0,58%)] overflow-hidden rounded-[1.15rem] bg-[#fbfaf5] shadow-[0_45px_120px_rgba(8,15,12,0.42)] md:h-[min(730px,90vh)] md:w-[min(1120px,96vw)] md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:grid-rows-1 md:rounded-[1.6rem]"
         role="dialog"
         aria-modal="true"
         aria-label={mode === "create" ? "Add a card" : "Edit card"}
       >
-        <div className="flex items-center justify-between">
-          <h2 className="m-0 font-serif text-2xl text-[#17251f]">
-            {mode === "create" ? "Add a card" : "Edit card"}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="grid size-9 cursor-pointer place-items-center rounded-full border border-[rgba(23,37,31,0.16)] bg-white/80 text-xl leading-none text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-
-        <label className="grid gap-2 text-xs font-bold tracking-[0.1em] text-[#65736c] uppercase">
-          Photo or video
+        <div
+          className="relative min-h-0 overflow-hidden border-2 border-dashed border-[rgba(23,37,31,0.22)] bg-[#d5d7cd]"
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={handleDrop}
+        >
           <input
+            ref={fileInputRef}
             type="file"
             accept={ACCEPT_ATTR}
             onChange={handleFileChange}
-            className="text-sm font-normal tracking-normal normal-case text-[#17251f] file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-[#17251f] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:text-white"
+            className="sr-only"
+            tabIndex={-1}
           />
-          <span className="text-[0.65rem] font-normal tracking-normal normal-case text-[#8a968f]">
-            Supported: {SUPPORTED_LABEL}
-          </span>
-        </label>
+          {previewUrl ? (
+            <div className="relative h-full min-h-[226px] w-full">
+              {previewKind === "video" ? (
+                <video
+                  src={previewUrl}
+                  controls
+                  playsInline
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={previewUrl}
+                  alt="Selected media preview"
+                  className="h-full w-full object-contain"
+                />
+              )}
+              <button
+                type="button"
+                onClick={openFilePicker}
+                className="absolute top-4 left-4 cursor-pointer rounded-full bg-[rgba(251,250,245,0.92)] px-4 py-2 text-[0.7rem] font-bold tracking-[0.04em] whitespace-nowrap text-[#17251f] shadow-sm focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#f2a65a]"
+              >
+                drop or click to replace
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={openFilePicker}
+              className="flex h-full min-h-[226px] w-full cursor-pointer flex-col items-center justify-center gap-3 px-6 text-center text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-[-6px] focus-visible:outline-[#f2a65a]"
+            >
+              <span className="font-serif text-xl">
+                Drag a file here or click
+              </span>
+              <span className="text-[0.65rem] font-bold tracking-[0.08em] text-[#65736c] uppercase">
+                Supported: {SUPPORTED_LABEL}
+              </span>
+            </button>
+          )}
+        </div>
 
-        {previewUrl ? (
-          <div className="overflow-hidden rounded-[1rem] bg-[#d5d7cd]">
-            {previewKind === "video" ? (
-              <video
-                src={previewUrl}
-                controls
-                playsInline
-                className="max-h-64 w-full object-contain"
-              />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={previewUrl}
-                alt="Selected media preview"
-                className="max-h-64 w-full object-contain"
-              />
-            )}
-          </div>
-        ) : null}
+        <div className="flex min-h-0 flex-col overflow-y-auto px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2rem,4vw,4.5rem)] [overscroll-behavior:contain] max-sm:px-5 max-sm:pt-8 max-sm:pb-12">
+          <h2 className="sr-only">
+            {mode === "create" ? "Add a card" : "Edit card"}
+          </h2>
 
-        <label className="grid gap-2 text-xs font-bold tracking-[0.1em] text-[#65736c] uppercase">
-          Category
-          <select
-            value={category}
-            onChange={(event) => setCategory(event.target.value as CategoryId)}
-            className="rounded-[0.75rem] border border-[rgba(23,37,31,0.2)] bg-white px-3 py-2 text-sm font-normal tracking-normal normal-case text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#f2a65a]"
-          >
-            <option value="" disabled>
-              Choose a group…
-            </option>
-            {CATEGORIES.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
+          <label className="mb-5 w-fit">
+            <span className="sr-only">Category</span>
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value as CategoryId)}
+              className="cursor-pointer appearance-none rounded-full border-0 bg-[#e8e8de] px-3 py-1.5 pr-8 text-[0.65rem] font-bold tracking-[0.1em] text-[#65736c] uppercase focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#f2a65a]"
+            >
+              <option value="" disabled>
+                Choose a group…
               </option>
-            ))}
-          </select>
-        </label>
+              {CATEGORIES.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label className="grid gap-2 text-xs font-bold tracking-[0.1em] text-[#65736c] uppercase">
-          Message
-          <div className="relative">
+          <label className="relative flex min-h-48 flex-1">
+            <span className="sr-only">Message</span>
             <textarea
               ref={textareaRef}
               value={message}
               onChange={(event) => setMessage(event.target.value)}
-              rows={5}
               placeholder="Write something nice… 🎂"
-              className="w-full resize-y rounded-[0.75rem] border border-[rgba(23,37,31,0.2)] bg-white px-3 py-2 text-sm font-normal tracking-normal normal-case text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#f2a65a]"
+              className="min-h-48 w-full resize-none border-0 bg-transparent pr-12 font-serif text-[1.05rem] leading-[1.7] text-[#17251f] outline-none placeholder:text-[#8a968f] focus-visible:rounded-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#f2a65a]"
             />
             <button
               type="button"
               onClick={() => setShowEmoji((open) => !open)}
               aria-label="Add emoji"
               aria-expanded={showEmoji}
-              className="absolute right-2 bottom-2 cursor-pointer rounded-full border border-[rgba(23,37,31,0.16)] bg-white/90 px-2 py-1 text-base leading-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#f2a65a]"
+              className="absolute right-1 bottom-1 cursor-pointer rounded-full border border-[rgba(23,37,31,0.16)] bg-white/90 px-2 py-1 text-base leading-none focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#f2a65a]"
             >
               <span aria-hidden="true">😀</span>
             </button>
+          </label>
+
+          {showEmoji ? (
+            <div className="mt-4 max-w-full overflow-x-auto">
+              <EmojiPicker
+                onEmojiClick={(emojiData) => insertEmoji(emojiData.emoji)}
+                width={320}
+                height={360}
+              />
+            </div>
+          ) : null}
+
+          {error ? (
+            <p className="mt-5 rounded-[0.75rem] bg-[#fbe6e0] px-3 py-2 text-sm text-[#8a2d16]">
+              {error}
+            </p>
+          ) : null}
+
+          <div className="mt-8 flex justify-end gap-3 border-t border-[rgba(23,37,31,0.12)] pt-5">
+            <button
+              type="button"
+              onClick={onClose}
+              className="cursor-pointer rounded-full px-5 py-2.5 text-xs font-bold tracking-[0.1em] text-[#65736c] uppercase hover:text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="cursor-pointer rounded-full bg-[#17251f] px-6 py-2.5 text-xs font-bold tracking-[0.1em] text-white uppercase transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+            >
+              {submitting
+                ? "Saving…"
+                : mode === "create"
+                  ? "Add card"
+                  : "Save changes"}
+            </button>
           </div>
-        </label>
-
-        {showEmoji ? (
-          <div className="justify-self-start">
-            <EmojiPicker
-              onEmojiClick={(emojiData) => insertEmoji(emojiData.emoji)}
-              width={320}
-              height={360}
-            />
-          </div>
-        ) : null}
-
-        {error ? (
-          <p className="m-0 rounded-[0.75rem] bg-[#fbe6e0] px-3 py-2 text-sm text-[#8a2d16]">
-            {error}
-          </p>
-        ) : null}
-
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer rounded-full px-5 py-2.5 text-xs font-bold tracking-[0.1em] text-[#65736c] uppercase hover:text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="cursor-pointer rounded-full bg-[#17251f] px-6 py-2.5 text-xs font-bold tracking-[0.1em] text-white uppercase transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
-          >
-            {submitting
-              ? "Saving…"
-              : mode === "create"
-                ? "Add card"
-                : "Save changes"}
-          </button>
         </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 grid size-11 cursor-pointer place-items-center rounded-full border border-[rgba(23,37,31,0.16)] bg-[rgba(251,250,245,0.92)] p-0 text-[1.65rem] leading-none text-[#17251f] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-[#f2a65a]"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
       </form>
     </div>,
     document.body,

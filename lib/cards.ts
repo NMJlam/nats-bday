@@ -15,6 +15,7 @@ export type Card = {
   message: string;
   alt: string;
   ownerId?: string;
+  ownerName?: string;
 };
 
 export function shuffleCards(
@@ -51,6 +52,7 @@ export function rowToCard(row: CardRow): Card {
     message: row.message,
     alt: row.alt,
     ownerId: row.ownerId,
+    ownerName: row.ownerName ?? undefined,
   };
 }
 
