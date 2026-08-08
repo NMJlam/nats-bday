@@ -331,17 +331,16 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
             >
               <span aria-hidden="true">😀</span>
             </button>
+            {showEmoji ? (
+              <div className="absolute right-1 bottom-10 z-10 max-w-[calc(100%-0.25rem)] overflow-x-auto rounded-lg shadow-xl">
+                <EmojiPicker
+                  onEmojiClick={(emojiData) => insertEmoji(emojiData.emoji)}
+                  width={320}
+                  height={360}
+                />
+              </div>
+            ) : null}
           </label>
-
-          {showEmoji ? (
-            <div className="mt-4 max-w-full overflow-x-auto">
-              <EmojiPicker
-                onEmojiClick={(emojiData) => insertEmoji(emojiData.emoji)}
-                width={320}
-                height={360}
-              />
-            </div>
-          ) : null}
 
           {error ? (
             <p className="mt-5 rounded-[0.75rem] bg-[#fbe6e0] px-3 py-2 text-sm text-[#8a2d16]">
