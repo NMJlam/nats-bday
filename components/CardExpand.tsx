@@ -12,6 +12,7 @@ import { categoryLabel } from "@/lib/categories";
 import { CARD_DIALOG_CLOSED, CARD_DIALOG_TWEEN } from "./animation";
 import { CardEditor } from "./CardEditor";
 import { CardMedia } from "./CardMedia";
+import { useBodyScrollLock } from "./useBodyScrollLock";
 
 type CardExpandProps = {
   card: Card;
@@ -32,14 +33,14 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  useBodyScrollLock();
+
   const canEdit = Boolean(
     session?.user &&
       (session.user.isAdmin || session.user.id === card.ownerId),
   );
 
   useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -51,7 +52,6 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
@@ -83,7 +83,12 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
         card={card}
         onClose={() => setEditing(false)}
         onSaved={() => {
-          setEditing(false);
+          // Keep `editing` true while closing. Flipping back to the expanded
+          // view remounts the animated motion.article into an already-exiting
+          // AnimatePresence context, which never finishes its exit and leaves a
+          // frozen overlay whose close button and backdrop no longer respond.
+          // Closing from the editor (a non-animated subtree) lets
+          // AnimatePresence unmount CardExpand cleanly.
           onClose();
           router.refresh();
         }}

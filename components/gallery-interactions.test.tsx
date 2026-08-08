@@ -9,8 +9,15 @@ import type { Card } from "@/lib/cards";
 import { CardGrid } from "./CardGrid";
 import { CategoriesGallery } from "./CategoriesGallery";
 
+const mockSession = vi.hoisted(() => ({
+  data: null as null | {
+    user: { id: string; isAdmin: boolean };
+  },
+  status: "unauthenticated" as "authenticated" | "unauthenticated",
+}));
+
 vi.mock("next-auth/react", () => ({
-  useSession: () => ({ data: null, status: "unauthenticated" }),
+  useSession: () => mockSession,
   signIn: vi.fn(),
   signOut: vi.fn(),
 }));
@@ -71,6 +78,8 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+  mockSession.data = null;
+  mockSession.status = "unauthenticated";
 });
 
 describe("gallery interactions", () => {
@@ -132,6 +141,40 @@ describe("gallery interactions", () => {
     await waitFor(() => {
       expect(screen.queryByRole("dialog", { name: "Coast" })).toBeNull();
     });
+  });
+
+  it("remains interactive after saving edits to a card", async () => {
+    const user = userEvent.setup();
+    mockSession.data = { user: { id: "admin", isAdmin: true } };
+    mockSession.status = "authenticated";
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({ card: cards[0] }),
+    } as Response);
+    render(<CardGrid cards={cards} />);
+
+    await user.click(screen.getByRole("button", { name: "Open Coast" }));
+    await user.click(screen.getByRole("button", { name: "Edit" }));
+    await user.clear(screen.getByRole("textbox", { name: "Message" }));
+    await user.type(
+      screen.getByRole("textbox", { name: "Message" }),
+      "Updated travel note.",
+    );
+    await user.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+    expect(document.body.style.overflow).toBe("");
+
+    await user.click(screen.getByRole("button", { name: "Open Table" }));
+    expect(screen.getByRole("dialog", { name: "Table" })).toBeTruthy();
+
+    await user.click(screen.getByTestId("card-dialog-backdrop"));
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+    expect(document.body.style.overflow).toBe("");
   });
 
   it("shows a quiet video preview and controls in the expanded card", async () => {
