@@ -25,11 +25,12 @@ function capitalizeName(name: string): string {
   );
 }
 
-export function CardExpand({ card, onClose }: CardExpandProps) {
+export function CardExpand({ card: initialCard, onClose }: CardExpandProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
   const { data: session } = useSession();
   const router = useRouter();
+  const [card, setCard] = useState(initialCard);
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -82,14 +83,15 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
         mode="edit"
         card={card}
         onClose={() => setEditing(false)}
-        onSaved={() => {
-          // Keep `editing` true while closing. Flipping back to the expanded
-          // view remounts the animated motion.article into an already-exiting
-          // AnimatePresence context, which never finishes its exit and leaves a
-          // frozen overlay whose close button and backdrop no longer respond.
-          // Closing from the editor (a non-animated subtree) lets
-          // AnimatePresence unmount CardExpand cleanly.
-          onClose();
+        onSaved={(updated) => {
+          // Return to the expanded card showing the saved changes instead of
+          // closing. The viewer dismisses it themselves via the close button or
+          // backdrop. Updating local state means the edits appear immediately;
+          // router.refresh() re-syncs the grid behind the card.
+          if (updated) {
+            setCard(updated);
+          }
+          setEditing(false);
           router.refresh();
         }}
       />
