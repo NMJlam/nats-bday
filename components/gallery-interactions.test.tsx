@@ -143,13 +143,14 @@ describe("gallery interactions", () => {
     });
   });
 
-  it("remains interactive after saving edits to a card", async () => {
+  it("keeps the card open showing saved changes until dismissed", async () => {
     const user = userEvent.setup();
     mockSession.data = { user: { id: "admin", isAdmin: true } };
     mockSession.status = "authenticated";
+    const updatedCard: Card = { ...cards[0], message: "Updated travel note." };
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
-      json: async () => ({ card: cards[0] }),
+      json: async () => ({ card: updatedCard }),
     } as Response);
     render(<CardGrid cards={cards} />);
 
@@ -162,14 +163,23 @@ describe("gallery interactions", () => {
     );
     await user.click(screen.getByRole("button", { name: "Save changes" }));
 
+    // Saving returns to the expanded card showing the edits — it does not close.
+    await waitFor(() => {
+      expect(screen.getByRole("dialog", { name: "Coast" })).toBeTruthy();
+    });
+    expect(screen.getByText("Updated travel note.")).toBeTruthy();
+    expect(document.body.style.overflow).toBe("hidden");
+
+    // The viewer dismisses it manually via the close button.
+    await user.click(screen.getByRole("button", { name: "Close card" }));
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).toBeNull();
     });
     expect(document.body.style.overflow).toBe("");
 
+    // And the gallery remains fully interactive afterwards.
     await user.click(screen.getByRole("button", { name: "Open Table" }));
     expect(screen.getByRole("dialog", { name: "Table" })).toBeTruthy();
-
     await user.click(screen.getByTestId("card-dialog-backdrop"));
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).toBeNull();
