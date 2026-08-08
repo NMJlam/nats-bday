@@ -187,6 +187,23 @@ describe("gallery interactions", () => {
     expect(document.body.style.overflow).toBe("");
   });
 
+  it("removes a card from the gallery after it is deleted", async () => {
+    const user = userEvent.setup();
+    mockSession.data = { user: { id: "admin", isAdmin: true } };
+    mockSession.status = "authenticated";
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true } as Response);
+    render(<CardGrid cards={cards} />);
+
+    await user.click(screen.getByRole("button", { name: "Open Coast" }));
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: "Open Coast" })).toBeNull();
+    });
+    expect(screen.getByRole("button", { name: "Open Table" })).toBeTruthy();
+  });
+
   it("shows a quiet video preview and controls in the expanded card", async () => {
     const user = userEvent.setup();
     const { container } = render(<CardGrid cards={cards} />);

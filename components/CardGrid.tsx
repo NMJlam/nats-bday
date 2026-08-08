@@ -19,6 +19,9 @@ type CardGridProps = {
 
 export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
   const [activeCard, setActiveCard] = useState<Card | null>(null);
+  const [deletedCardIds, setDeletedCardIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const [revealed, setRevealed] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const reduceMotion = useReducedMotion();
@@ -34,13 +37,24 @@ export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
       triggerRef.current?.focus({ preventScroll: true }),
     );
   }, []);
+  const removeDeletedCard = useCallback((cardId: string) => {
+    setDeletedCardIds((current) => new Set(current).add(cardId));
+    setActiveCard(null);
+    triggerRef.current = null;
+  }, []);
+  const visibleCards = cards.filter((card) => !deletedCardIds.has(card.id));
   const expandedCard = activeCard ? (
-    <CardExpand key={activeCard.id} card={activeCard} onClose={closeCard} />
+    <CardExpand
+      key={activeCard.id}
+      card={activeCard}
+      onClose={closeCard}
+      onDeleted={removeDeletedCard}
+    />
   ) : null;
 
   return (
     <>
-      {cards.length > 0 ? (
+      {visibleCards.length > 0 ? (
         <motion.ul
           className="m-0 grid list-none grid-cols-1 gap-[clamp(1rem,2vw,1.75rem)] p-0 sm:grid-cols-2 lg:grid-cols-3"
           aria-label="Card gallery"
@@ -62,7 +76,7 @@ export function CardGrid({ cards, revealOnScroll = false }: CardGridProps) {
             },
           }}
         >
-          {cards.map((card) => (
+          {visibleCards.map((card) => (
             <motion.li
               key={card.id}
               variants={{

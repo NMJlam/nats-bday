@@ -17,6 +17,7 @@ import { useBodyScrollLock } from "./useBodyScrollLock";
 type CardExpandProps = {
   card: Card;
   onClose: () => void;
+  onDeleted: (cardId: string) => void;
 };
 
 function capitalizeName(name: string): string {
@@ -25,7 +26,11 @@ function capitalizeName(name: string): string {
   );
 }
 
-export function CardExpand({ card: initialCard, onClose }: CardExpandProps) {
+export function CardExpand({
+  card: initialCard,
+  onClose,
+  onDeleted,
+}: CardExpandProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
   const { data: session } = useSession();
@@ -69,7 +74,7 @@ export function CardExpand({ card: initialCard, onClose }: CardExpandProps) {
       if (!response.ok) {
         throw new Error("Delete failed");
       }
-      onClose();
+      onDeleted(card.id);
       router.refresh();
     } catch {
       setDeleting(false);
