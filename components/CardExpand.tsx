@@ -7,6 +7,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useSession } from "next-auth/react";
 
 import type { Card } from "@/lib/cards";
+import { categoryLabel } from "@/lib/categories";
 
 import { CARD_DIALOG_CLOSED, CARD_DIALOG_TWEEN } from "./animation";
 import { CardEditor } from "./CardEditor";
@@ -118,9 +119,17 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
           />
         </div>
         <div className="flex min-h-0 flex-col overflow-y-auto px-[clamp(1.5rem,4vw,4rem)] py-[clamp(2rem,4vw,4.5rem)] [overscroll-behavior:contain] max-sm:px-5 max-sm:pt-8 max-sm:pb-12">
+          <p className="mb-5 w-fit rounded-full bg-[#e8e8de] px-3 py-1 text-[0.65rem] font-bold tracking-[0.1em] text-[#65736c] uppercase">
+            {categoryLabel(card.category)}
+          </p>
           <p className="m-0 flex-1 font-serif text-[1.05rem] leading-[1.7] whitespace-pre-wrap text-[#17251f]">
             {card.message}
           </p>
+          {card.ownerName ? (
+            <p className="mt-4 font-serif text-sm text-[#65736c]">
+              From {card.ownerName}
+            </p>
+          ) : null}
           {canEdit ? (
             <div className="mt-8 flex gap-3 border-t border-[rgba(23,37,31,0.12)] pt-5">
               <button

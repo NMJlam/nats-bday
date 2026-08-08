@@ -10,6 +10,7 @@ export const cards = pgTable("cards", {
   alt: text("alt").notNull().default(""),
   ownerId: text("owner_id").notNull(),
   ownerEmail: text("owner_email").notNull(),
+  ownerName: text("owner_name"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

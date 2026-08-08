@@ -50,6 +50,7 @@ export async function POST(request: Request): Promise<Response> {
       alt: data.alt ?? "",
       ownerId: session.user.id,
       ownerEmail: session.user.email ?? "",
+      ownerName: session.user.name ?? null,
     })
     .returning();
 

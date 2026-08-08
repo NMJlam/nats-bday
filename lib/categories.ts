@@ -13,3 +13,7 @@ export type CategoryId = (typeof CATEGORIES)[number]["id"];
 export const CATEGORY_IDS: readonly CategoryId[] = CATEGORIES.map(
   (category) => category.id,
 );
+
+export function categoryLabel(id: CategoryId): string {
+  return CATEGORIES.find((category) => category.id === id)?.label ?? id;
+}
