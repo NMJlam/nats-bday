@@ -10,8 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:push": "dotenv -e .env.local -- drizzle-kit push",
-    "db:seed": "dotenv -e .env.local -- tsx scripts/seed-cards.ts"
+    "db:push": "dotenv -e .env.local -- drizzle-kit push"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -19,7 +18,6 @@
     "drizzle-orm": "^0.45.2",
     "emoji-picker-react": "^4.19.1",
     "framer-motion": "^13.0.0",
-    "gray-matter": "^4.0.3",
     "gsap": "^3.15.0",
     "motion": "^13.0.0",
     "next": "16.3.0",
@@ -41,7 +39,6 @@
     "eslint-config-next": "16.3.0",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
-    "tsx": "^4.23.11",
     "typescript": "^5",
     "vitest": "^4.1.10"
   }
