@@ -15,6 +15,8 @@ import {
   type MediaKind,
 } from "@/lib/media";
 
+import { useBodyScrollLock } from "./useBodyScrollLock";
+
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 type CardEditorProps = {
@@ -52,10 +54,9 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const objectUrlRef = useRef<string | null>(null);
 
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+  useBodyScrollLock();
 
+  useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         onClose();
@@ -64,7 +65,6 @@ export function CardEditor({ mode, card, onClose, onSaved }: CardEditorProps) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
       if (objectUrlRef.current) {
         URL.revokeObjectURL(objectUrlRef.current);
