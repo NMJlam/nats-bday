@@ -5,7 +5,7 @@ import FoldText from "@/components/FoldText";
 import { GalleryReveal } from "@/components/GalleryReveal";
 import { LandingSlideshow } from "@/components/LandingSlideshow";
 import { getAllCards, shuffleCards } from "@/lib/cards";
-import { SITE_TITLE } from "@/lib/site";
+import { HERO_TITLE, SITE_TITLE } from "@/lib/site";
 
 export default async function Home() {
   await connection();
@@ -20,7 +20,10 @@ export default async function Home() {
       <section className="relative z-10 grid min-h-[calc(100vh-var(--nav-height))] items-end overflow-hidden rounded-b-[clamp(1.75rem,4vw,4.5rem)] px-[5vw] py-[clamp(3rem,8vw,7rem)] text-white shadow-[0_35px_90px_rgba(23,37,31,0.3)]">
         <LandingSlideshow slides={slides} />
         <div className="relative z-3 grid max-w-[980px] gap-6">
-          <h1 className="m-0 max-w-[900px] font-serif text-[clamp(3.4rem,8vw,7.8rem)] leading-[0.88] font-normal tracking-[-0.055em] text-shadow-lg">
+          <h1
+            className="m-0 max-w-[900px] font-serif text-[clamp(2.75rem,8vw,7.8rem)] leading-[0.88] font-normal tracking-[-0.055em] text-shadow-lg"
+            aria-label={SITE_TITLE}
+          >
             <FoldText
               color="inherit"
               creaseShading={0.55}
@@ -33,7 +36,7 @@ export default async function Home() {
               splitBy="char"
               stagger={0.055}
               style={{ letterSpacing: "inherit", lineHeight: "inherit" }}
-              text={SITE_TITLE}
+              text={HERO_TITLE}
               trigger="mount"
             />
           </h1>

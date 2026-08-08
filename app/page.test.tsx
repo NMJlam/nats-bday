@@ -3,12 +3,14 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { SITE_TITLE } from "@/lib/site";
+import { HERO_TITLE, SITE_TITLE } from "@/lib/site";
 
 import Home from "./page";
 
 vi.mock("@/components/FoldText", () => ({
-  default: ({ text }: { text: string }) => <>{text}</>,
+  default: ({ text }: { text: string }) => (
+    <span data-testid="hero-fold-text">{text}</span>
+  ),
 }));
 
 vi.mock("next/server", () => ({
@@ -42,6 +44,8 @@ describe("Home", () => {
   it("shows the landing content immediately without a loading intro", async () => {
     render(await Home());
 
+    expect(HERO_TITLE).toBe("Happy Birthday\nNat!");
+    expect(screen.getByTestId("hero-fold-text").textContent).toBe(HERO_TITLE);
     expect(
       screen.getByRole("heading", { level: 1, name: SITE_TITLE }),
     ).toBeTruthy();
