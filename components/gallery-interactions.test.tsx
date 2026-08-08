@@ -27,6 +27,7 @@ const cards: Card[] = [
     message:
       "# Coast\n\nA travel note.\n\n![Cliffs](imgs/coastal-morning.svg)\n\n```js\nconst answer = 42;\n```",
     alt: "Coast",
+    ownerName: "mary‑jane d’angelo",
   },
   {
     id: "table",
@@ -90,6 +91,7 @@ describe("gallery interactions", () => {
     // Message renders as plain text (no Markdown parsing), preserving the raw
     // characters the author typed.
     expect(within(dialog).getByText(/A travel note\./)).toBeTruthy();
+    expect(within(dialog).getByText("From Mary‑Jane D’Angelo")).toBeTruthy();
     expect(window.location.href).toBe(initialUrl);
 
     await user.keyboard("{Escape}");

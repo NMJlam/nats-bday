@@ -18,6 +18,12 @@ type CardExpandProps = {
   onClose: () => void;
 };
 
+function capitalizeName(name: string): string {
+  return name.replace(/(^|[\s'’‘ʼ\p{Dash_Punctuation}])\p{L}/gu, (segment) =>
+    segment.toLocaleUpperCase(),
+  );
+}
+
 export function CardExpand({ card, onClose }: CardExpandProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const reduceMotion = useReducedMotion();
@@ -127,7 +133,7 @@ export function CardExpand({ card, onClose }: CardExpandProps) {
           </p>
           {card.ownerName ? (
             <p className="mt-4 font-serif text-sm text-[#65736c]">
-              From {card.ownerName}
+              From {capitalizeName(card.ownerName)}
             </p>
           ) : null}
           {canEdit ? (
